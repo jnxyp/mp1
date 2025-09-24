@@ -1,1 +1,415 @@
-/* Your SCSS here. */
+$font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+$primary-color: #c3eb40;
+$title-color: darken($primary-color, 15%);
+$font-color: #333;
+$font-color-light: #eee;
+$background-color: #f4f4f4;
+
+$breakpoint-width: 1024px;
+
+$navbar-height: 4rem;
+$navbar-shrink-height: 3rem;
+
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+a {
+  color: inherit;
+}
+
+html {
+  scroll-padding-top: $navbar-shrink-height;
+}
+
+body {
+  font-family: $font-stack;
+  margin: 0;
+  padding: 0;
+  background-color: $background-color;
+  color: $font-color;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  background-color: $primary-color;
+  height: $navbar-height;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  transition: all 0.3s ease;
+
+  &.shrink {
+    height: $navbar-shrink-height;
+    font-size: 0.8rem;
+    opacity: 0.85;
+  }
+
+  .left {
+    display: flex;
+    align-items: center;
+
+    .logo {
+      width: 3em;
+      height: 3em;
+      margin-right: 1rem;
+
+      svg {
+        width: 100%;
+        height: 100%;
+        fill: $font-color;
+      }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.5em;
+      color: $font-color;
+    }
+  }
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    .nav-item {
+      background-color: $primary-color;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 0.5rem;
+      color: $font-color;
+      text-decoration: none;
+      font-weight: bold;
+
+      &:hover {
+        filter: brightness(90%);
+      }
+
+      &.active {
+        filter: brightness(80%);
+        border-bottom: 2px solid $font-color;
+      }
+    }
+  }
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  > :nth-child(odd) {
+    background-color: lighten($background-color, 5%);
+  }
+
+  .section {
+    padding: 2rem;
+    text-align: center;
+
+    h2 {
+      margin-top: 0;
+      font-size: 2rem;
+      color: $title-color;
+    }
+
+    p {
+      font-size: 1rem;
+      color: $font-color;
+    }
+  }
+
+  .title-section {
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    padding: 10rem 2rem;
+
+    background: transparent;
+    
+    p {
+      font-size: 1.2em;
+      color: $font-color-light;
+    }
+
+    .background-video {
+      position: absolute;
+      top: -50px;
+      left: -17vw;
+      width: 120vw;
+      height: 100vh;
+      object-fit: cover;
+      overflow: hidden;
+      z-index: -100;
+    }
+  }
+
+  #portfolio {
+    .portfolio-gallery {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1vw;
+
+      .portfolio-item {
+        flex-basis: 30%;
+
+        @media (max-width: $breakpoint-width) {
+          flex-basis: 45%;
+        }
+
+        flex-grow: 0;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+
+        &:hover img {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+
+  #highlights {
+    .highlights-columns {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      margin-top: 2rem;
+
+      .highlight {
+        @keyframes rotate {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        .highlight-logo {
+          width: 4em;
+          height: 4em;
+
+          background-color: #333;
+          border-radius: 50%;
+          padding: 0.5em;
+
+          display: inline-block;
+          animation: rotate 20s linear infinite;
+
+          svg {
+            fill: $title-color;
+          }
+
+          &:hover {
+            animation-play-state: paused;
+          }
+        }
+      }
+    }
+  }
+
+  #reviews {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .carousel {
+      width: 85vw;
+      height: 8em;
+      padding: 0 20px;
+      margin: 0;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: stretch;
+      gap: 4vw;
+
+      overflow-x: scroll;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+
+      &#reviews-carousel {
+        anchor-name: --carousel;
+      }
+
+      &::scroll-button(*) {
+        border: 0;
+        font-size: 2rem;
+        background: none;
+        color: black;
+        opacity: 0.7;
+        cursor: pointer;
+        position: absolute;
+      }
+
+      &#reviews-carousel::scroll-button(*) {
+        position-anchor: --carousel;
+      }
+
+      &::scroll-button(*):hover,
+      &::scroll-button(*):focus {
+        opacity: 1;
+      }
+
+      &::scroll-button(*):disabled {
+        opacity: 0.2;
+        cursor: unset;
+      }
+
+      &::scroll-button(left) {
+        content: "◄";
+        right: calc(anchor(left) - 0.75rem);
+        bottom: calc(anchor(top) - 80px);
+      }
+
+      &::scroll-button(right) {
+        content: "►";
+        left: calc(anchor(right) - 0.75rem);
+        bottom: calc(anchor(top) - 80px);
+      }
+
+      .carousel-item {
+        list-style-type: none;
+        background-color: $primary-color;
+        padding: 1em;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        flex-basis: 100%;
+        flex-shrink: 0;
+        scroll-snap-align: center;
+
+        .carousel-item-quote {
+          font-size: 1.2em;
+          font-style: italic;
+          margin: 0 0 0.5em 0;
+        }
+
+        .carousel-item-author {
+          font-size: 1em;
+          font-weight: bold;
+          margin: 0;
+          align-self: flex-end;
+        }
+      }
+    }
+  }
+
+  .decorative-image {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+
+    &#decorative-image-1 {
+      background-image: url("../assets/1.png");
+    }
+
+    &#decorative-image-2 {
+      background-image: url("../assets/6.png");
+    }
+  }
+}
+
+.footer {
+  background-color: $primary-color;
+  color: $font-color;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .social-media {
+    display: flex;
+
+    a {
+      width: 2rem;
+      height: 2rem;
+
+      color: $font-color;
+      text-decoration: none;
+
+      svg {
+        width: 100%;
+        height: 100%;
+        fill: $font-color;
+      }
+      font-size: 1.5rem;
+
+      @keyframes bounce {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20%);
+        }
+      }
+
+      svg:hover {
+        animation: bounce 0.5s infinite;
+      }
+    }
+  }
+}
+
+dialog.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  border: none;
+  outline: none;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  padding: 0.5rem;
+  background-color: white;
+  z-index: 2000;
+
+  user-select: none;
+
+  .modal-content {
+    position: relative;
+
+    .close-button {
+      position: absolute;
+      top: 0;
+      right: 0.5rem;
+      font-size: 3rem;
+      color: $font-color-light;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 90vw;
+      max-height: 70vh;
+    }
+  }
+}
